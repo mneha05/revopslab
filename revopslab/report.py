@@ -1,0 +1,7 @@
+from __future__ import annotations
+import html, json
+
+def render(pipeline,campaign):
+    stages="".join(f"<tr><td>{html.escape(k)}</td><td>{v['count']}</td><td>${v['amount']:,.0f}</td></tr>" for k,v in pipeline['by_stage'].items())
+    variants="".join(f"<tr><td>{v}</td><td>{m['open_rate']:.1%}</td><td>{m['ctr']:.1%}</td><td>{m['conversion_rate']:.1%}</td><td>${m['revenue']:,.0f}</td></tr>" for v,m in campaign.items() if v in ('A','B'))
+    return f'''<!doctype html><meta charset="utf-8"><title>RevOpsLab</title><style>body{{font:16px system-ui;background:#0b1020;color:#e8eefc;max-width:1100px;margin:40px auto;padding:0 20px}}.grid{{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}}.card{{background:#151d33;padding:18px;border-radius:16px}}table{{width:100%;border-collapse:collapse;margin-top:18px}}td,th{{padding:10px;border-bottom:1px solid #2b3654;text-align:left}}h1{{font-size:44px}}</style><h1>RevOpsLab</h1><p>CRM pipeline + campaign analytics demo</p><div class="grid"><div class="card"><b>Deals</b><br>{pipeline['deals']}</div><div class="card"><b>Win rate</b><br>{pipeline['win_rate']:.1%}</div><div class="card"><b>Weighted pipeline</b><br>${pipeline['active_weighted_pipeline']:,.0f}</div><div class="card"><b>Won revenue</b><br>${pipeline['closed_won_revenue']:,.0f}</div></div><h2>Pipeline by stage</h2><table><tr><th>Stage</th><th>Deals</th><th>Amount</th></tr>{stages}</table><h2>Campaign A/B</h2><table><tr><th>Variant</th><th>Open rate</th><th>CTR</th><th>Conversion</th><th>Revenue</th></tr>{variants}</table>'''

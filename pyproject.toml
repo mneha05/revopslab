@@ -1,0 +1,16 @@
+[build-system]
+requires=["setuptools>=69","wheel"]
+build-backend="setuptools.build_meta"
+
+[project]
+name="revopslab"
+version="0.1.0"
+description="CRM pipeline and campaign analytics with Salesforce and HubSpot connectors"
+requires-python=">=3.11"
+dependencies=[]
+
+[project.scripts]
+revopslab="revopslab.cli:main"
+
+[tool.setuptools.packages.find]
+include=["revopslab*"]
